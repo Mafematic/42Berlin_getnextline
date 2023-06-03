@@ -2,16 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C/C++ Runner: Debug Session",
+      "name": "Debug get_next_line",
       "type": "cppdbg",
       "request": "launch",
+      "program": "${workspaceFolder}/get_next_lineV4.c",
       "args": [],
       "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
       "externalConsole": false,
-      "cwd": "/nfs/homes/fszendzi/_Cursus/get_next_line",
-      "program": "/nfs/homes/fszendzi/_Cursus/get_next_line/build/Debug/outDebug",
       "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
