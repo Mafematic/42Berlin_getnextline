@@ -27,44 +27,14 @@ char	*extract_line_from_buffer(char *buffer)
 	return (line);
 }
 
-char	*move_pointer(char *ptr_position)
+char *read_append_to_buffer(int fd, char **buffer, char **line)
 {
-	char	*new_buffer;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (ptr_position[i] && ptr_position[i] != '\n')
-		i++;
-	if (ptr_position[i] == '\0')
-	{
-		free(ptr_position);
-		return (NULL);
-	}
-	if (ptr_position[i] == '\n')
-		i++;
-	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i) + 1);
-	if (!new_buffer)
-		return (NULL);
-	j = 0;
-	while (ptr_position[i + j])
-	{
-		new_buffer[j] = ptr_position[i + j];
-		j++;
-	}
-	new_buffer[j] = '\0';
-	free(ptr_position);
-	return (new_buffer);
-}
-
-char	*read_append_to_buffer(int fd, char **buffer, char **line)
-{
-	char	*tmp_line;
-	int		bytes_read;
+	char *tmp_line;
+	int bytes_read;
 
 	tmp_line = NULL;
 	bytes_read = 1;
-	while (!(ft_strchr(buffer[fd], '\n')) && bytes_read != 0)
+	while (!(ft_strchr(buffer[fd], '\n')) && bytes_read > 0)
 	{
 		bytes_read = read(fd, *line, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -84,6 +54,39 @@ char	*read_append_to_buffer(int fd, char **buffer, char **line)
 	}
 	free(*line);
 	return (buffer[fd]);
+}
+
+char *move_pointer(char *ptr_position)
+{
+	char *new_buffer;
+	int i;
+	int j;
+
+	i = 0;
+	while (ptr_position[i] && ptr_position[i] != '\n')
+		i++;
+	if (ptr_position[i] == '\0')
+	{
+		free(ptr_position);
+		return (NULL);
+	}
+	if (ptr_position[i] == '\n')
+		i++;
+	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i) + 1);
+	if (!new_buffer)
+	{
+		free(ptr_position);
+		return (NULL);
+	}
+	j = 0;
+	while (ptr_position[i + j])
+	{
+		new_buffer[j] = ptr_position[i + j];
+		j++;
+	}
+	new_buffer[j] = '\0';
+	free(ptr_position);
+	return (new_buffer);
 }
 
 char	*get_next_line(int fd)
