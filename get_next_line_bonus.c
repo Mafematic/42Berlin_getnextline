@@ -89,13 +89,18 @@ char *move_pointer(char *ptr_position)
 	return (new_buffer);
 }
 
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	static char	*buffer[1024] = {NULL};
-	char		*line;
+	static char *buffer[1024] = {NULL};
+	char *line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 	{
+		if (buffer[fd] != NULL)
+		{
+			free(buffer[fd]);
+			buffer[fd] = NULL;
+		}
 		return (NULL);
 	}
 	line = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
@@ -103,7 +108,11 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buffer[fd] = read_append_to_buffer(fd, buffer, &line);
 	if (!buffer[fd])
+	{
+		free(line);
+		line = NULL;
 		return (NULL);
+	}
 	line = extract_line_from_buffer(buffer[fd]);
 	buffer[fd] = move_pointer(buffer[fd]);
 	if (!buffer[fd] || buffer[fd][0] == '\0')
