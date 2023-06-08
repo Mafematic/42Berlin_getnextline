@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fszendzi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/08 18:50:21 by fszendzi          #+#    #+#             */
+/*   Updated: 2023/06/08 18:50:26 by fszendzi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 char	*extract_line_from_buffer(char *buffer)
@@ -27,10 +39,10 @@ char	*extract_line_from_buffer(char *buffer)
 	return (line);
 }
 
-char *read_append_to_buffer(int fd, char **buffer, char **line)
+char	*read_append_to_buffer(int fd, char **buffer, char **line)
 {
-	char *tmp_line;
-	int bytes_read;
+	char	*tmp_line;
+	int		bytes_read;
 
 	tmp_line = NULL;
 	bytes_read = 1;
@@ -56,11 +68,11 @@ char *read_append_to_buffer(int fd, char **buffer, char **line)
 	return (buffer[fd]);
 }
 
-char *move_pointer(char *ptr_position)
+char	*move_pointer(char *ptr_position)
 {
-	char *new_buffer;
-	int i;
-	int j;
+	char	*new_buffer;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (ptr_position[i] && ptr_position[i] != '\n')
@@ -70,29 +82,35 @@ char *move_pointer(char *ptr_position)
 		free(ptr_position);
 		return (NULL);
 	}
-	if (ptr_position[i] == '\n')
-		i++;
-	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i) + 1);
+	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i++) + 1);
 	if (!new_buffer)
 	{
 		free(ptr_position);
 		return (NULL);
 	}
-	j = 0;
-	while (ptr_position[i + j])
-	{
+	j = -1;
+	while (ptr_position[i + (++j)])
 		new_buffer[j] = ptr_position[i + j];
-		j++;
-	}
 	new_buffer[j] = '\0';
 	free(ptr_position);
 	return (new_buffer);
 }
 
-char *get_next_line(int fd)
+int	check_buffer_failing(char *buffer, char **line)
 {
-	static char *buffer[1024] = {NULL};
-	char *line;
+	if (!buffer)
+	{
+		free(*line);
+		*line = NULL;
+		return (1);
+	}
+	return (0);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buffer[1024] = {NULL};
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 	{
@@ -107,19 +125,10 @@ char *get_next_line(int fd)
 	if (!line)
 		return (NULL);
 	buffer[fd] = read_append_to_buffer(fd, buffer, &line);
-	if (!buffer[fd])
-	{
-		free(line);
-		line = NULL;
+	if (check_buffer_failing(buffer[fd], &line))
 		return (NULL);
-	}
 	line = extract_line_from_buffer(buffer[fd]);
 	buffer[fd] = move_pointer(buffer[fd]);
-	if (!buffer[fd] || buffer[fd][0] == '\0')
-	{
-		free(buffer[fd]);
-		buffer[fd] = NULL;
-	}
 	return (line);
 }
 
@@ -127,48 +136,48 @@ char *get_next_line(int fd)
 #include <fcntl.h>
 #include <stdio.h>
 
-int	open_file(char *file_path)
+int     open_file(char *file_path)
 {
-	int	fd;
+        int     fd;
 
-	fd = open(file_path, O_RDONLY);
-	if (fd == -1)
-	{
-		return (0);
-	}
-	return (fd);
+        fd = open(file_path, O_RDONLY);
+        if (fd == -1)
+        {
+                return (0);
+        }
+        return (fd);
 }
 
-int	close_file(int fd)
+int     close_file(int fd)
 {
-	if (close(fd) == -1)
-	{
-		return (0);
-	}
-	return (1);
+        if (close(fd) == -1)
+        {
+                return (0);
+        }
+        return (1);
 }
 
-int	main(void)
+int     main(void)
 {
-	int	fd;
+        int             fd;
+        char    *line;
 
-	char *line; 
-	fd = open_file("text");
-	if (fd <= 0)
-	{
-		printf("Could not open file!\n"); 
-		return (1); 
-	}
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("%s", line);
-		free(line); 
-	}
-	if (close_file(fd) == 0)
-	{
-		printf("Could not close file.\n");
-		return (1);
-	}
-	return (0); 
+        fd = open_file("text");
+        if (fd <= 0)
+        {
+                printf("Could not open file!\n");
+                return (1);
+        }
+        while ((line = get_next_line(fd)) != NULL)
+        {
+                printf("%s", line);
+                free(line);
+        }
+        if (close_file(fd) == 0)
+        {
+                printf("Could not close file.\n");
+                return (1);
+        }
+        return (0);
 }
 */

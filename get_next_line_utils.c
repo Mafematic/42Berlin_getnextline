@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fszendzi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/08 17:18:51 by fszendzi          #+#    #+#             */
+/*   Updated: 2023/06/08 17:18:54 by fszendzi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 size_t	ft_strlen(char *str)
@@ -38,11 +50,11 @@ char	*ft_strchr(char *s, int c)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char *dest;
-	size_t i;
-	size_t j;
-	size_t s1_len;
-	size_t s2_len;
+	char	*dest;
+	size_t	i;
+	size_t	j;
+	size_t	s1_len;
+	size_t	s2_len;
 
 	if (s1)
 		s1_len = ft_strlen(s1);

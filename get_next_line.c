@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fszendzi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/08 17:17:42 by fszendzi          #+#    #+#             */
+/*   Updated: 2023/06/08 17:17:44 by fszendzi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*extract_line_from_buffer(char *buffer)
@@ -41,9 +53,7 @@ char	*move_pointer(char *ptr_position)
 		free(ptr_position);
 		return (NULL);
 	}
-	if (ptr_position[i] == '\n')
-		i++;
-	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i) + 1);
+	new_buffer = malloc(sizeof(char) * (ft_strlen(ptr_position) - i++) + 1);
 	if (!new_buffer)
 		return (NULL);
 	j = 0;
@@ -102,11 +112,6 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = extract_line_from_buffer(buffer);
 	buffer = move_pointer(buffer);
-	if (!buffer || buffer[0] == '\0')
-	{
-		free(buffer);
-		buffer = NULL;
-	}
 	return (line);
 }
 
